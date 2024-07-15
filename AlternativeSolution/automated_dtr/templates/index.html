@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DTR</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Contents</h1>
+    <div id="value-container">
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Make the AJAX call when the page loads
+            $.ajax({
+                url: '{% url "showCSV" %}',
+                type: 'GET',
+                success: function(response) {
+                    var tableBody = $('#data-table tbody');
+                    tableBody.empty();  // Clear existing rows
+
+                    // Iterate through the response data and create table rows
+                    for (var id in response.value) {
+                        response.value[id].forEach(function(data) {
+                            var row = $('<tr></tr>');
+                            row.append('<td>' + id + '</td>');
+                            row.append('<td>' + data.name + '</td>');
+                            tableBody.append(row);
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
